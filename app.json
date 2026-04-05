@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "departements",
-    "slug": "departements",
-    "version": "1.0.0",
+    "name": "carte-blanche",
+    "slug": "carte-blanche",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,6 +24,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     }
   }
