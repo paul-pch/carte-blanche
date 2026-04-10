@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton, MD3Theme, useTheme } from "react-native-paper"
 import Departement from './Departement'
 import RechercheModal from './RechercheModal'
@@ -17,7 +18,7 @@ export default function Accueil({ onToggleTheme }: AccueilProps) {
   const [reversed, setReversed] = useState(false)
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.card}>
         <Departement key={`${current.numero}-${reversed}`} numero={current.numero} nom={current.nom} reversed={reversed} />
       </View>
@@ -52,7 +53,7 @@ export default function Accueil({ onToggleTheme }: AccueilProps) {
         onDismiss={() => setSearchVisible(false)}
         onSelect={setCurrent}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 

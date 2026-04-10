@@ -1,6 +1,6 @@
-import { FlatList, StyleSheet, View } from 'react-native';
-import { List, MD3Theme, Modal, Portal, Searchbar, useTheme } from 'react-native-paper';
-import { useState } from 'react';
+import { FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { IconButton, List, MD3Theme, Modal, Portal, useTheme } from 'react-native-paper';
+import { useRef, useState } from 'react';
 import { departements, type Departement } from '../data/departements';
 
 interface RechercheModalProps {
@@ -12,6 +12,7 @@ interface RechercheModalProps {
 export default function RechercheModal({ visible, onDismiss, onSelect }: RechercheModalProps) {
   const theme = useTheme()
   const styles = makeStyles(theme)
+  const inputRef = useRef<TextInput>(null)
   const [query, setQuery] = useState('')
 
   const results = query.length === 0
@@ -23,20 +24,37 @@ export default function RechercheModal({ visible, onDismiss, onSelect }: Recherc
 
   const handleSelect = (departement: Departement) => {
     setQuery('')
+    inputRef.current?.clear()
     onSelect(departement)
     onDismiss()
+  }
+
+  const handleClear = () => {
+    setQuery('')
+    inputRef.current?.clear()
+    inputRef.current?.focus()
   }
 
   return (
     <Portal>
       <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={styles.modal}>
-        <Searchbar
-          placeholder="Numéro ou nom..."
-          value={query}
-          onChangeText={setQuery}
-          autoFocus
-          style={styles.searchbar}
-        />
+        <View style={styles.searchRow}>
+          <TextInput
+            ref={inputRef}
+            placeholder="Numéro ou nom..."
+            placeholderTextColor={theme.colors.onSurfaceDisabled}
+            onChangeText={setQuery}
+            autoFocus
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={styles.input}
+          />
+          {query.length > 0 && (
+            <TouchableOpacity onPress={handleClear}>
+              <IconButton icon="close" size={20} />
+            </TouchableOpacity>
+          )}
+        </View>
         <FlatList
           data={results}
           keyExtractor={d => d.numero}
@@ -63,8 +81,20 @@ function makeStyles(theme: MD3Theme) {
       maxHeight: '80%',
       overflow: 'hidden',
     },
-    searchbar: {
+    searchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
       margin: 12,
+      borderWidth: 1,
+      borderColor: theme.colors.outline,
+      borderRadius: 8,
+      paddingLeft: 12,
+    },
+    input: {
+      flex: 1,
+      height: 48,
+      color: theme.colors.onSurface,
+      fontSize: 16,
     },
   })
 }
